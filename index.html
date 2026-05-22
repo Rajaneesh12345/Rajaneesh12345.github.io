@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explainly — AI Text Explanation for the Web</title>
+  <meta name="description" content="Select any text on any webpage and get instant AI-powered explanations. ELI5, Normal, Deep, and Why? modes." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; background: #f9fafb; line-height: 1.6; }
+    a { color: #5c6bc0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Nav */
+    nav { background: #1e1e2e; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: 62px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+    .logo { color: #fff; font-weight: 800; font-size: 1.25rem; text-decoration: none; letter-spacing: -.3px; }
+    .logo span { color: #818cf8; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { color: #9ca3af; font-size: .9rem; text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { background: #5c6bc0; color: #fff !important; padding: .45rem 1.1rem; border-radius: 6px; font-weight: 600; }
+    .nav-cta:hover { background: #4f5eaf; }
+    @media (max-width: 600px) { .hide-mobile { display: none; } }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, #1e1e2e 0%, #252545 100%); color: #fff; padding: 6rem 2rem 5rem; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.15; margin-bottom: 1.25rem; }
+    .hero h1 span { color: #818cf8; }
+    .hero p { font-size: 1.15rem; color: #c4c9e2; max-width: 540px; margin: 0 auto 2.5rem; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: .7rem 1.6rem; border-radius: 8px; font-weight: 600; font-size: .95rem; transition: all .2s; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: #5c6bc0; color: #fff; }
+    .btn-primary:hover { background: #4f5eaf; text-decoration: none; color: #fff; }
+    .btn-ghost { background: transparent; color: #c4c9e2; border: 1.5px solid #4a4a6a; }
+    .btn-ghost:hover { background: rgba(255,255,255,.07); text-decoration: none; color: #fff; }
+    .btn-lg { padding: .85rem 2rem; font-size: 1.05rem; }
+
+    /* Badge */
+    .badge { display: inline-block; background: rgba(129,140,248,.15); color: #818cf8; border: 1px solid rgba(129,140,248,.3); border-radius: 999px; padding: .25rem .85rem; font-size: .8rem; font-weight: 600; margin-bottom: 1.2rem; letter-spacing: .5px; }
+
+    /* Sections */
+    .section { padding: 5rem 2rem; }
+    .section-alt { background: #fff; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label { color: #5c6bc0; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 1rem; }
+    .section-sub { color: #6b7280; font-size: 1.05rem; max-width: 520px; }
+
+    /* How it works */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .step { text-align: center; }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; background: #eef0fd; color: #5c6bc0; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .4rem; }
+    .step p { color: #6b7280; font-size: .9rem; margin: 0; }
+
+    /* Features */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .feature-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; }
+    .feature-icon { font-size: 1.6rem; margin-bottom: .75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .feature-card p { color: #6b7280; font-size: .875rem; margin: 0; }
+
+    /* Modes */
+    .modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
+    .mode { border-radius: 10px; padding: 1.25rem; border: 1.5px solid; }
+    .mode-eli5  { background: #fff7ed; border-color: #fed7aa; }
+    .mode-normal{ background: #eef2ff; border-color: #c7d2fe; }
+    .mode-deep  { background: #faf5ff; border-color: #e9d5ff; }
+    .mode-why   { background: #f0fdf4; border-color: #bbf7d0; }
+    .mode h3 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
+    .mode-eli5 h3  { color: #c2410c; }
+    .mode-normal h3{ color: #4338ca; }
+    .mode-deep h3  { color: #7e22ce; }
+    .mode-why h3   { color: #166534; }
+    .mode p { font-size: .85rem; color: #374151; margin: 0; }
+
+    /* CTA Band */
+    .cta-band { background: linear-gradient(135deg, #1e1e2e, #252545); color: #fff; border-radius: 16px; padding: 3.5rem 2rem; text-align: center; margin: 4rem 0 2rem; }
+    .cta-band h2 { font-size: 1.9rem; font-weight: 800; margin-bottom: .75rem; }
+    .cta-band p { color: #c4c9e2; margin-bottom: 2rem; font-size: 1rem; }
+
+    /* Footer */
+    footer { background: #1e1e2e; color: #6b7280; padding: 2.5rem 2rem; text-align: center; }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: .75rem; flex-wrap: wrap; }
+    .footer-links a { color: #9ca3af; font-size: .85rem; text-decoration: none; }
+    .footer-links a:hover { color: #fff; }
+    .copyright { font-size: .78rem; color: #4b5563; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/"><span>Explain</span>ly</a>
+  <ul class="nav-links">
+    <li class="hide-mobile"><a href="/pricing.html">Pricing</a></li>
+    <li class="hide-mobile"><a href="/privacy.html">Privacy</a></li>
+    <li><a class="nav-cta" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Add to Chrome</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Chrome Extension · MV3</div>
+  <h1>Understand <span>anything</span><br>you read — instantly</h1>
+  <p>Select any text on any website. Explainly gives you a context-aware AI explanation in seconds, without leaving the page.</p>
+  <div class="hero-btns">
+    <a class="btn btn-primary btn-lg" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Add to Chrome — Free</a>
+    <a class="btn btn-ghost btn-lg" href="/pricing.html">See Pricing</a>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Three steps to clarity</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Select any text</h3>
+        <p>Highlight any word, sentence, or paragraph on any webpage — up to 600 characters.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Click or press Alt+E</h3>
+        <p>A small button appears near your selection. Click it, or press Alt+E for an instant popup.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Read the explanation</h3>
+        <p>The AI streams back a meaning, tone, and simplified rewrite — in the depth you choose.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Depth modes -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Explanation depth</div>
+    <h2 class="section-title">Four modes, one shortcut</h2>
+    <p class="section-sub">Switch modes with a single click. The last mode you used is remembered.</p>
+    <div class="modes">
+      <div class="mode mode-eli5">
+        <h3>ELI5</h3>
+        <p>Explain Like I'm 5. Quick, simplified — perfect for unfamiliar concepts.</p>
+      </div>
+      <div class="mode mode-normal">
+        <h3>Normal</h3>
+        <p>Everyday reading level. The default mode for most use cases.</p>
+      </div>
+      <div class="mode mode-deep">
+        <h3>Deep</h3>
+        <p>Academic and literary analysis. Full interpretation of meaning and subtext.</p>
+      </div>
+      <div class="mode mode-why">
+        <h3>Why?</h3>
+        <p>Why did the author write this line? Authorial intent and context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Streaming AI responses</h3>
+        <p>Explanations stream token-by-token so you start reading before the response is complete.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <h3>Auto dark / light theme</h3>
+        <p>The popup automatically matches the background of the page you're reading. Five dark palettes to choose from.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔖</div>
+        <h3>Save explanations</h3>
+        <p>Save to cloud (synced across devices) or locally on your machine. Search and filter your library.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>Built-in PDF viewer</h3>
+        <p>PDFs open in Explainly's viewer with full text selection and AI explanation support.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔊</div>
+        <h3>Text-to-speech</h3>
+        <p>Listen to any selected text aloud using your browser's built-in speech synthesis.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Privacy first</h3>
+        <p>No browsing history stored. No page URLs logged. Anonymous users have zero data sent to servers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <h2>Start for free today</h2>
+      <p>5 free explanations per day, no credit card required. Upgrade any time for unlimited access.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a class="btn btn-primary btn-lg" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Add to Chrome — Free</a>
+        <a class="btn btn-ghost btn-lg" href="/pricing.html">View Pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="/pricing.html">Pricing</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/refund.html">Refund Policy</a>
+  </div>
+  <p class="copyright">&copy; 2025 Explainly. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

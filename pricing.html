@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — Explainly</title>
+  <meta name="description" content="Explainly pricing plans. Start free with 5 explains per day. Upgrade to Pro for unlimited access." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; background: #f9fafb; line-height: 1.6; }
+    a { color: #5c6bc0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav { background: #1e1e2e; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: 62px; position: sticky; top: 0; z-index: 100; }
+    .logo { color: #fff; font-weight: 800; font-size: 1.25rem; text-decoration: none; }
+    .logo span { color: #818cf8; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { color: #9ca3af; font-size: .9rem; text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { background: #5c6bc0; color: #fff !important; padding: .45rem 1.1rem; border-radius: 6px; font-weight: 600; }
+    .nav-cta:hover { background: #4f5eaf; }
+    @media (max-width: 600px) { .hide-mobile { display: none; } }
+
+    .page-hero { background: linear-gradient(135deg, #1e1e2e, #252545); color: #fff; padding: 4rem 2rem 3.5rem; text-align: center; }
+    .page-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; margin-bottom: .75rem; }
+    .page-hero p { color: #c4c9e2; font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem; }
+
+    /* Plans */
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+    .plan { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 2rem; display: flex; flex-direction: column; position: relative; }
+    .plan.featured { border-color: #5c6bc0; box-shadow: 0 0 0 3px rgba(92,107,192,.12); }
+    .plan-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #5c6bc0; color: #fff; font-size: .75rem; font-weight: 700; padding: .25rem .85rem; border-radius: 999px; white-space: nowrap; }
+    .plan-name { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin-bottom: .5rem; }
+    .plan-price { font-size: 2.4rem; font-weight: 900; color: #111827; line-height: 1; margin-bottom: .25rem; }
+    .plan-price sup { font-size: 1.1rem; vertical-align: super; font-weight: 700; }
+    .plan-price sub { font-size: 1rem; color: #6b7280; font-weight: 500; }
+    .plan-note { font-size: .8rem; color: #6b7280; margin-bottom: 1.5rem; min-height: 1.2rem; }
+    .plan-features { list-style: none; flex: 1; margin-bottom: 1.5rem; }
+    .plan-features li { display: flex; align-items: flex-start; gap: .5rem; font-size: .875rem; color: #374151; margin-bottom: .6rem; }
+    .plan-features li::before { content: "✓"; color: #5c6bc0; font-weight: 700; flex-shrink: 0; margin-top: .05rem; }
+    .plan-features li.dim::before { content: "–"; color: #d1d5db; }
+    .plan-features li.dim { color: #9ca3af; }
+    .btn { display: block; text-align: center; padding: .7rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: .9rem; text-decoration: none; transition: all .2s; }
+    .btn-primary { background: #5c6bc0; color: #fff; }
+    .btn-primary:hover { background: #4f5eaf; text-decoration: none; }
+    .btn-outline { border: 1.5px solid #5c6bc0; color: #5c6bc0; }
+    .btn-outline:hover { background: #5c6bc0; color: #fff; text-decoration: none; }
+
+    /* Compare table */
+    .compare-section h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: .5rem; }
+    .compare-section p { color: #6b7280; margin-bottom: 2rem; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+    th { background: #f3f4f6; font-size: .8rem; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; padding: .9rem 1.2rem; text-align: center; }
+    th:first-child { text-align: left; }
+    td { padding: .85rem 1.2rem; font-size: .875rem; color: #374151; border-top: 1px solid #f3f4f6; text-align: center; }
+    td:first-child { text-align: left; font-weight: 500; }
+    td .yes { color: #5c6bc0; font-weight: 700; }
+    td .no { color: #d1d5db; }
+    tr:hover td { background: #fafafa; }
+
+    /* FAQ */
+    .faq { margin-top: 4rem; }
+    .faq h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 2rem; }
+    .faq-item { border-bottom: 1px solid #e5e7eb; padding: 1.25rem 0; }
+    .faq-item h3 { font-size: .95rem; font-weight: 600; margin-bottom: .4rem; }
+    .faq-item p { font-size: .875rem; color: #6b7280; margin: 0; }
+
+    /* Note */
+    .currency-note { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 1rem 1.25rem; font-size: .85rem; color: #4338ca; margin-bottom: 2.5rem; }
+
+    footer { background: #1e1e2e; color: #6b7280; padding: 2.5rem 2rem; text-align: center; }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: .75rem; flex-wrap: wrap; }
+    .footer-links a { color: #9ca3af; font-size: .85rem; text-decoration: none; }
+    .footer-links a:hover { color: #fff; }
+    .copyright { font-size: .78rem; color: #4b5563; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/"><span>Explain</span>ly</a>
+  <ul class="nav-links">
+    <li class="hide-mobile"><a href="/">Home</a></li>
+    <li class="hide-mobile"><a href="/privacy.html">Privacy</a></li>
+    <li><a class="nav-cta" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Add to Chrome</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <h1>Simple, transparent pricing</h1>
+  <p>Start for free. Upgrade when you need unlimited access across every website you visit.</p>
+</div>
+
+<main>
+  <div class="currency-note">
+    💡 Prices are in Indian Rupees (₹ INR). Paddle, our payment processor, handles secure checkout and currency conversion for international customers.
+  </div>
+
+  <!-- Plan cards -->
+  <div class="plans">
+
+    <!-- Free -->
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">₹0</div>
+      <div class="plan-note">No credit card needed</div>
+      <ul class="plan-features">
+        <li>5 explanations per day</li>
+        <li>All 4 depth modes (ELI5, Normal, Deep, Why?)</li>
+        <li>Streaming AI responses</li>
+        <li>Auto dark / light theme</li>
+        <li>5 colour palettes</li>
+        <li>Local save library (50 saves)</li>
+        <li>Text-to-speech</li>
+        <li class="dim">Unlimited explanations</li>
+        <li class="dim">Cloud save library</li>
+        <li class="dim">Cross-device sync</li>
+      </ul>
+      <a class="btn btn-outline" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Install Free</a>
+    </div>
+
+    <!-- Monthly -->
+    <div class="plan">
+      <div class="plan-name">Monthly</div>
+      <div class="plan-price"><sup>₹</sup>199<sub>/mo</sub></div>
+      <div class="plan-note">Flexible — cancel any time</div>
+      <ul class="plan-features">
+        <li>Unlimited explanations</li>
+        <li>All 4 depth modes — no daily cap</li>
+        <li>Streaming via Gemini 2.5 Flash</li>
+        <li>Auto dark / light theme</li>
+        <li>5 colour palettes</li>
+        <li>Cloud save library (synced)</li>
+        <li>Text-to-speech</li>
+        <li>PDF viewer with AI support</li>
+        <li>Priority support</li>
+      </ul>
+      <a class="btn btn-outline" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Get Monthly</a>
+    </div>
+
+    <!-- Yearly (featured) -->
+    <div class="plan featured">
+      <div class="plan-badge">Most popular · Best value</div>
+      <div class="plan-name">Yearly</div>
+      <div class="plan-price"><sup>₹</sup>1,499<sub>/yr</sub></div>
+      <div class="plan-note">Save 37% · ₹125/mo effective</div>
+      <ul class="plan-features">
+        <li>Unlimited on every website</li>
+        <li>All 4 depths — no daily cap</li>
+        <li>Tone & authorial intent detection</li>
+        <li>Streaming via Gemini 2.5 Flash</li>
+        <li>Searchable cloud library</li>
+        <li>Cross-device sync</li>
+        <li>PDF viewer with AI support</li>
+        <li>Text-to-speech</li>
+        <li>Priority support</li>
+      </ul>
+      <a class="btn btn-primary" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Get Yearly</a>
+    </div>
+
+    <!-- Lifetime -->
+    <div class="plan">
+      <div class="plan-name">Lifetime</div>
+      <div class="plan-price"><sup>₹</sup>4,999</div>
+      <div class="plan-note">Pay once, own forever</div>
+      <ul class="plan-features">
+        <li>Every Pro feature — forever</li>
+        <li>Unlimited explanations</li>
+        <li>All 4 depths — no cap, ever</li>
+        <li>PDF explanations</li>
+        <li>Unlimited cloud library</li>
+        <li>Cross-device sync</li>
+        <li>Text-to-speech</li>
+        <li>Priority support</li>
+        <li>All future updates included</li>
+      </ul>
+      <a class="btn btn-outline" href="https://chromewebstore.google.com/search/explainly" target="_blank" rel="noopener">Get Lifetime</a>
+    </div>
+
+  </div>
+
+  <!-- Compare table -->
+  <div class="compare-section">
+    <h2>Compare plans</h2>
+    <p>Everything included across all plans.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th>Monthly</th>
+          <th>Yearly</th>
+          <th>Lifetime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Daily explanation limit</td>
+          <td>5/day</td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>Deep mode limit</td>
+          <td>5/day</td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>Why? mode limit</td>
+          <td>5/day</td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+          <td><span class="yes">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>ELI5 / Normal mode</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Streaming AI responses</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Themes &amp; layouts</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Local save library</td>
+          <td>50 saves</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>Cloud save library</td>
+          <td><span class="no">–</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Cross-device sync</td>
+          <td><span class="no">–</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>PDF viewer &amp; AI support</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Text-to-speech</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Future updates</td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+          <td><span class="yes">✓ Forever</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-item">
+      <h3>What payment methods are accepted?</h3>
+      <p>Payments are processed securely by Paddle, which accepts credit and debit cards, PayPal, and various local payment methods worldwide.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I cancel my subscription?</h3>
+      <p>Yes. Monthly and yearly subscriptions can be cancelled at any time. You will retain Pro access until the end of the current billing period.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there a refund policy?</h3>
+      <p>Yes — we offer a 30-day money-back guarantee on all purchases. See our <a href="/refund.html">Refund Policy</a> for details.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What currencies are supported?</h3>
+      <p>Prices are listed in Indian Rupees (₹ INR). Paddle automatically converts to your local currency at checkout and handles all applicable taxes.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Does the free plan require a credit card?</h3>
+      <p>No. The free plan is available immediately after installing the Chrome extension — no sign-up or payment required.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I upgrade from Free to Pro later?</h3>
+      <p>Yes. You can upgrade at any time from the extension's Settings page under "Upgrade to Pro".</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/refund.html">Refund Policy</a>
+  </div>
+  <p class="copyright">&copy; 2025 Explainly. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
