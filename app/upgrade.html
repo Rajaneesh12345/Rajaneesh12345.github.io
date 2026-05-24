@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Upgrade — Explainly</title>
+  <link rel="stylesheet" href="/css/app.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1e1e2e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+
+<nav class="app-nav">
+  <a href="/" class="nav-logo"><span>Explain</span>ly</a>
+  <span class="nav-title">Upgrade</span>
+  <a href="/app/account.html" class="nav-avatar" id="nav-avatar" style="display:none;">?</a>
+</nav>
+
+<main class="app-main">
+
+  <!-- Success banner (shown after payment) -->
+  <div class="success-banner" id="success-banner">
+    <h3>You're upgraded!</h3>
+    <p id="success-msg">Your plan has been updated. Enjoy your new features.</p>
+    <a href="/app/account.html" class="btn btn-primary" style="margin-top:.75rem;display:inline-flex;">View Account</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="upgrade-hero">
+    <h1>Unlock more of Explainly</h1>
+    <p>Higher daily limits, PDF support, cloud saves, and priority processing.</p>
+  </div>
+
+  <!-- Provider toggle -->
+  <div class="provider-row" id="provider-row">
+    <button class="provider-btn" id="btn-razorpay" onclick="setProvider('razorpay')">
+      Razorpay (India)
+    </button>
+    <button class="provider-btn" id="btn-paddle" onclick="setProvider('paddle')">
+      Paddle (International)
+    </button>
+  </div>
+
+  <!-- Polling indicator -->
+  <div class="polling-indicator" id="polling-indicator">
+    <div class="poll-dot"></div>
+    <span>Waiting for payment confirmation…</span>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-wrap" id="plans-wrap">
+
+    <!-- Pro -->
+    <div class="plan-card" id="card-pro">
+      <div class="plan-name">Pro</div>
+      <div class="plan-tagline">For regular readers</div>
+      <div class="plan-price">
+        <span class="plan-currency">₹</span>
+        <span class="plan-amount">149</span>
+        <span class="plan-period">/month</span>
+      </div>
+      <div class="plan-usd">$4.99 / month</div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>100 explains / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>10 Deep / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>10 Why? / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>PDF Viewer</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Cloud saves (unlimited)</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <button class="btn btn-primary btn-full" id="buy-pro" onclick="handleBuy('pro', this)">Get Pro</button>
+    </div>
+
+    <!-- Premium -->
+    <div class="plan-card featured" id="card-premium">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">Premium</div>
+      <div class="plan-tagline">For power users</div>
+      <div class="plan-price">
+        <span class="plan-currency">₹</span>
+        <span class="plan-amount">399</span>
+        <span class="plan-period">/month</span>
+      </div>
+      <div class="plan-usd">$11.99 / month</div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>500 explains / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>75 Deep / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>75 Why? / day</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Everything in Pro</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Priority queue</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Premium AI models</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <button class="btn btn-primary btn-full" id="buy-premium" onclick="handleBuy('premium', this)">Get Premium</button>
+    </div>
+
+    <!-- Premium Yearly -->
+    <div class="plan-card" id="card-premium_yearly" style="width:100%;">
+      <div class="plan-badge badge-save">Save ~37%</div>
+      <div class="plan-name">Premium Yearly</div>
+      <div class="plan-tagline">Best value — billed once a year</div>
+      <div class="plan-price">
+        <span class="plan-currency">₹</span>
+        <span class="plan-amount">2,999</span>
+        <span class="plan-period">/year</span>
+      </div>
+      <div class="plan-usd">$99 / year (~$8.25/mo)</div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Everything in Premium</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Pay once, covered for 12 months</li>
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>Cancel anytime</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <button class="btn btn-primary btn-full" id="buy-premium_yearly" onclick="handleBuy('premium_yearly', this)">Get Premium Yearly</button>
+    </div>
+
+  </div>
+
+  <!-- Trust row -->
+  <div class="trust-row">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      30-day money-back guarantee
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Secure checkout
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Cancel anytime
+    </span>
+  </div>
+
+  <p style="text-align:center;font-size:.78rem;color:#9ca3af;margin-top:.25rem;">
+    Payments via Razorpay (India) or Paddle (International). <a href="/refund.html">Refund policy</a>
+  </p>
+
+</main>
+
+<nav class="tab-bar">
+  <a href="/app/library.html" class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <span>Library</span>
+  </a>
+  <a href="/app/account.html" class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Account</span>
+  </a>
+  <a href="/app/upgrade.html" class="tab-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <span>Upgrade</span>
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/api.js"></script>
+<script>
+  var _provider    = detectProvider();
+  var _pollTimer   = null;
+  var _pollCount   = 0;
+  var MAX_POLLS    = 200; // 200 × 3s = 10 min
+  var _currentTier = 'free';
+
+  // ── Boot ──────────────────────────────────────────────
+  updateProviderUI();
+
+  if (getToken()) {
+    var av = document.getElementById('nav-avatar');
+    av.textContent = getAvatarInitial();
+    av.style.display = 'flex';
+
+    fetchUsage().then(function(data) {
+      _currentTier = (data.tier || 'free').toLowerCase();
+      markCurrentPlan(_currentTier);
+    }).catch(function() {});
+  }
+
+  // ── Provider detect ────────────────────────────────────
+  function detectProvider() {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Kolkata' ? 'razorpay' : 'paddle';
+    } catch(e) { return 'paddle'; }
+  }
+
+  function setProvider(p) {
+    _provider = p;
+    updateProviderUI();
+  }
+
+  function updateProviderUI() {
+    document.getElementById('btn-razorpay').classList.toggle('active', _provider === 'razorpay');
+    document.getElementById('btn-paddle').classList.toggle('active',   _provider === 'paddle');
+  }
+
+  // ── Mark current plan ──────────────────────────────────
+  function markCurrentPlan(tier) {
+    var planMap = { pro: 'pro', premium: 'premium' };
+    var key = planMap[tier];
+    if (!key) return;
+    var btn = document.getElementById('buy-' + key);
+    var card = document.getElementById('card-' + key);
+    if (btn)  { btn.textContent = 'Current Plan'; btn.disabled = true; }
+    if (card) { card.classList.add('current-plan'); card.classList.remove('featured'); }
+    // Add current badge
+    var badge = document.createElement('div');
+    badge.className = 'plan-badge badge-current';
+    badge.textContent = 'Current Plan';
+    if (card) card.insertBefore(badge, card.firstChild);
+  }
+
+  // ── Buy handler ────────────────────────────────────────
+  function handleBuy(planKey, btn) {
+    if (!getToken()) {
+      window.location.href = '/app/login.html?next=/app/upgrade.html';
+      return;
+    }
+    var targetTier = planKey === 'premium_yearly' ? 'premium' : planKey;
+    if (TIER_ORDER[_currentTier] >= TIER_ORDER[targetTier]) {
+      return; // already on this tier or higher
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Opening…';
+
+    if (_provider === 'razorpay') {
+      window.open(PAYMENT_LINKS.razorpay[planKey], '_blank');
+      btn.disabled = false;
+      btn.textContent = getBtnLabel(planKey);
+      startPolling(planKey);
+    } else {
+      loadPaddle(function() {
+        Paddle.Initialize({ token: PAYMENT_LINKS.paddle.client_token });
+        Paddle.Checkout.open({
+          items: [{ priceId: PAYMENT_LINKS.paddle[planKey], quantity: 1 }],
+          customer: { email: getEmail() || undefined },
+          settings: { displayMode: 'overlay' }
+        });
+        btn.disabled = false;
+        btn.textContent = getBtnLabel(planKey);
+        startPolling(planKey);
+      });
+    }
+  }
+
+  function getBtnLabel(planKey) {
+    return { pro: 'Get Pro', premium: 'Get Premium', premium_yearly: 'Get Premium Yearly' }[planKey] || 'Upgrade';
+  }
+
+  // ── Paddle loader ──────────────────────────────────────
+  function loadPaddle(cb) {
+    if (typeof Paddle !== 'undefined') { cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
+    s.onload = cb;
+    document.head.appendChild(s);
+  }
+
+  // ── Polling ────────────────────────────────────────────
+  function startPolling(planKey) {
+    clearInterval(_pollTimer);
+    _pollCount = 0;
+    document.getElementById('polling-indicator').classList.add('show');
+    var targetTier = planKey === 'premium_yearly' ? 'premium' : planKey;
+
+    _pollTimer = setInterval(function() {
+      _pollCount++;
+      if (_pollCount > MAX_POLLS) {
+        clearInterval(_pollTimer);
+        document.getElementById('polling-indicator').classList.remove('show');
+        return;
+      }
+      fetchUsage().then(function(data) {
+        var newTier = (data.tier || 'free').toLowerCase();
+        if (TIER_ORDER[newTier] >= TIER_ORDER[targetTier]) {
+          clearInterval(_pollTimer);
+          document.getElementById('polling-indicator').classList.remove('show');
+          _currentTier = newTier;
+          showSuccess(newTier);
+          markCurrentPlan(newTier);
+        }
+      }).catch(function() {});
+    }, 3000);
+  }
+
+  // ── Success ────────────────────────────────────────────
+  function showSuccess(tier) {
+    var label = tier.charAt(0).toUpperCase() + tier.slice(1);
+    document.getElementById('success-msg').textContent =
+      'Your account has been upgraded to ' + label + '. Enjoy your new features!';
+    var banner = document.getElementById('success-banner');
+    banner.classList.add('show');
+    banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>

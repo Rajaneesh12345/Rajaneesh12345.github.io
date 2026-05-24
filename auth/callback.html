@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signing in… — Explainly</title>
+  <link rel="stylesheet" href="/css/app.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1e1e2e" />
+</head>
+<body class="spinner-page">
+  <div class="spinner-logo"><span>Explain</span>ly</div>
+  <div class="spinner"></div>
+  <span>Signing you in…</span>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    var _done = false;
+
+    function handleSession(session) {
+      if (_done || !session) return;
+      _done = true;
+      setSession(session.access_token, session.refresh_token, session.user.email);
+      var next = sessionStorage.getItem('explainly_login_next') || '/app/library.html';
+      sessionStorage.removeItem('explainly_login_next');
+      window.location.replace(next);
+    }
+
+    _supabase.auth.onAuthStateChange(function(event, session) {
+      if (event === 'SIGNED_IN') handleSession(session);
+    });
+
+    _supabase.auth.getSession().then(function(result) {
+      if (result.data && result.data.session) {
+        handleSession(result.data.session);
+      } else {
+        // Give onAuthStateChange time to fire for PKCE code exchange
+        setTimeout(function() {
+          if (!_done) window.location.replace('/app/login.html');
+        }, 8000);
+      }
+    });
+  </script>
+</body>
+</html>

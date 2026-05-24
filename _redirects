@@ -1,0 +1,5 @@
+/auth/callback   /auth/callback.html   200
+/app/login       /app/login.html       200
+/app/library     /app/library.html     200
+/app/account     /app/account.html     200
+/app/upgrade     /app/upgrade.html     200
