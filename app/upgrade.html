@@ -168,7 +168,14 @@
 
   // ── Paddle.js init ─────────────────────────────────────
   Paddle.Environment.set('sandbox');
-  Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN });
+  Paddle.Initialize({
+    token: PADDLE_CLIENT_TOKEN,
+    eventCallback: function(data) {
+      if (data.name === 'checkout.completed') {
+        Paddle.Checkout.close();
+      }
+    }
+  });
 
   // ── Boot ──────────────────────────────────────────────
   updateProviderUI();
