@@ -9,10 +9,10 @@ var PAYMENT_LINKS = {
     premium_yearly: 'https://rzp.io/rzp/omwxwFtt',
   },
   paddle: {
-    pro: 'pri_01kscavrtny8jsfcmqq0f2s4p9',
-    premium: 'pri_01kscb2frsxy26dqgb0y9crpd7',
-    premium_yearly: 'pri_01kscb3kvvw80k8pf3wdkc3kf0',
-    client_token: 'test_fa8c01fd71d2b65852b736a5729', // TODO: swap for live token before launch
+    pro: 'https://sandbox-pay.paddle.io/hsc_01ksdkekp6wkqnrahth9ccd24w_6rqetqanzw9799xanen88gzymv8g2sf9',
+    premium: 'https://sandbox-pay.paddle.io/hsc_01ksdkg398g9peqzwfpqmgcacd_gbj73mx4yrnq70qd2pr242f7dj4q2kht',
+    premium_yearly: 'https://sandbox-pay.paddle.io/hsc_01ksdkhd62b121jga8ze1f57ty_y5sqnmrg36aqe7ar9jf5p8c8aa1j1zek',
+    // TODO: swap sandbox-pay.paddle.io → pay.paddle.com for live
   },
 };
 

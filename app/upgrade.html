@@ -226,37 +226,18 @@
     btn.disabled = true;
     btn.textContent = 'Opening…';
 
-    if (_provider === 'razorpay') {
-      window.open(PAYMENT_LINKS.razorpay[planKey], '_blank');
-      btn.disabled = false;
-      btn.textContent = getBtnLabel(planKey);
-      startPolling(planKey);
-    } else {
-      loadPaddle(function() {
-        Paddle.Initialize({ token: PAYMENT_LINKS.paddle.client_token });
-        Paddle.Checkout.open({
-          items: [{ priceId: PAYMENT_LINKS.paddle[planKey], quantity: 1 }],
-          customer: { email: getEmail() || undefined },
-          settings: { displayMode: 'overlay' }
-        });
-        btn.disabled = false;
-        btn.textContent = getBtnLabel(planKey);
-        startPolling(planKey);
-      });
-    }
+    var url = _provider === 'razorpay'
+      ? PAYMENT_LINKS.razorpay[planKey]
+      : PAYMENT_LINKS.paddle[planKey];
+
+    window.open(url, '_blank');
+    btn.disabled = false;
+    btn.textContent = getBtnLabel(planKey);
+    startPolling(planKey);
   }
 
   function getBtnLabel(planKey) {
     return { pro: 'Get Pro', premium: 'Get Premium', premium_yearly: 'Get Premium Yearly' }[planKey] || 'Upgrade';
-  }
-
-  // ── Paddle loader ──────────────────────────────────────
-  function loadPaddle(cb) {
-    if (typeof Paddle !== 'undefined') { cb(); return; }
-    var s = document.createElement('script');
-    s.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
-    s.onload = cb;
-    document.head.appendChild(s);
   }
 
   // ── Polling ────────────────────────────────────────────
