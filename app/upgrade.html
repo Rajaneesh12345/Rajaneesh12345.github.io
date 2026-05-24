@@ -154,6 +154,7 @@
   </a>
 </nav>
 
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/auth.js"></script>
@@ -164,6 +165,10 @@
   var _pollCount   = 0;
   var MAX_POLLS    = 200; // 200 × 3s = 10 min
   var _currentTier = 'free';
+
+  // ── Paddle.js init ─────────────────────────────────────
+  Paddle.Environment.set('sandbox');
+  Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN });
 
   // ── Boot ──────────────────────────────────────────────
   updateProviderUI();
@@ -220,17 +225,28 @@
     }
     var targetTier = planKey === 'premium_yearly' ? 'premium' : planKey;
     if (TIER_ORDER[_currentTier] >= TIER_ORDER[targetTier]) {
-      return; // already on this tier or higher
+      return;
     }
 
     btn.disabled = true;
     btn.textContent = 'Opening…';
 
-    var url = _provider === 'razorpay'
-      ? PAYMENT_LINKS.razorpay[planKey]
-      : PAYMENT_LINKS.paddle[planKey];
+    if (_provider === 'paddle') {
+      var email = getEmail();
+      Paddle.Checkout.open({
+        items: [{ priceId: PADDLE_PRICE_IDS[planKey], quantity: 1 }],
+        customer: { email: email },
+        customData: { user_email: email },
+        settings: { displayMode: 'overlay' }
+      });
+      btn.disabled = false;
+      btn.textContent = getBtnLabel(planKey);
+      startPolling(planKey);
+      return;
+    }
 
-    window.open(url, '_blank');
+    // Razorpay: open payment link in new tab
+    window.open(PAYMENT_LINKS.razorpay[planKey], '_blank');
     btn.disabled = false;
     btn.textContent = getBtnLabel(planKey);
     startPolling(planKey);
