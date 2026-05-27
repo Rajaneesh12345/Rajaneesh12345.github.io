@@ -4,9 +4,9 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 var PAYMENT_LINKS = {
   razorpay: {
-    pro: 'https://rzp.io/rzp/XfgyVMBS',
-    premium: 'https://rzp.io/rzp/LXoPEdq',
-    premium_yearly: 'https://rzp.io/rzp/vADeUUEb',
+    pro: 'https://razorpay.com/payment-link/plink_SuPE84xECSuVtN',
+    premium: 'https://razorpay.com/payment-link/plink_SuPEwaBnGJvmUA',
+    premium_yearly: 'https://razorpay.com/payment-link/plink_SuPFeIhHsdz4g2',
   },
 };
 
