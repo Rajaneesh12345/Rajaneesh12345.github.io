@@ -177,6 +177,27 @@
     }
   });
 
+  // ── Deep-link params from extension ───────────────────
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var planParam     = params.get('plan');
+    var providerParam = params.get('provider');
+
+    if (providerParam === 'razorpay' || providerParam === 'paddle') {
+      _provider = providerParam;
+    }
+
+    if (planParam) {
+      setTimeout(function() {
+        var card = document.getElementById('card-' + planParam);
+        if (!card) return;
+        card.style.transition = 'box-shadow .4s';
+        card.style.boxShadow  = '0 0 0 2px #5c6bc0, 0 8px 32px rgba(92,107,192,.35)';
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  })();
+
   // ── Boot ──────────────────────────────────────────────
   updateProviderUI();
 
