@@ -10,12 +10,12 @@ var PAYMENT_LINKS = {
   },
 };
 
-var PADDLE_CLIENT_TOKEN = 'test_fa8c01fd71d2b65852b736a5729';
+var PADDLE_CLIENT_TOKEN = 'live_42b07d511cbe9e5b33a08783c20';
 
 var PADDLE_PRICE_IDS = {
-  pro: 'pri_01kscavrtny8jsfcmqq0f2s4p9',
-  premium: 'pri_01kscb2frsxy26dqgb0y9crpd7',
-  premium_yearly: 'pri_01kscb3kvvw80k8pf3wdkc3kf0',
+  pro: 'pri_01ksckjz43htt6wyb4g1fwghve',
+  premium: 'pri_01ksmsawx6j2gs2dzf0at6zrps',
+  premium_yearly: 'pri_01ksms9t6sbas9v6dbh8v3z7ed',
 };
 
 var TIER_LIMITS = {

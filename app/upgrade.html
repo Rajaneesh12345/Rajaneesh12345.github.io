@@ -26,6 +26,12 @@
     <a href="/app/account.html" class="btn btn-primary" style="margin-top:.75rem;display:inline-flex;">View Account</a>
   </div>
 
+  <!-- Failure banner (shown on cancel / timeout) -->
+  <div class="fail-banner" id="fail-banner">
+    <p id="fail-msg">Payment not completed. If you were charged, please wait a moment and refresh — it can take up to 60 seconds to confirm.</p>
+    <button class="btn btn-outline" onclick="dismissFail()" style="margin-top:.5rem;">Try Again</button>
+  </div>
+
   <!-- Hero -->
   <div class="upgrade-hero">
     <h1>Unlock more of Explainly</h1>
@@ -167,12 +173,16 @@
   var _currentTier = 'free';
 
   // ── Paddle.js init ─────────────────────────────────────
-  Paddle.Environment.set('sandbox');
   Paddle.Initialize({
     token: PADDLE_CLIENT_TOKEN,
     eventCallback: function(data) {
       if (data.name === 'checkout.completed') {
         Paddle.Checkout.close();
+      }
+      if (data.name === 'checkout.closed' || data.name === 'checkout.error') {
+        clearInterval(_pollTimer);
+        document.getElementById('polling-indicator').classList.remove('show');
+        showFail('Payment cancelled. You have not been charged.');
       }
     }
   });
@@ -297,6 +307,7 @@
       if (_pollCount > MAX_POLLS) {
         clearInterval(_pollTimer);
         document.getElementById('polling-indicator').classList.remove('show');
+        showFail('Payment not confirmed after 10 minutes. If you completed payment, please refresh the page.');
         return;
       }
       fetchUsage().then(function(data) {
@@ -317,9 +328,22 @@
     var label = tier.charAt(0).toUpperCase() + tier.slice(1);
     document.getElementById('success-msg').textContent =
       'Your account has been upgraded to ' + label + '. Enjoy your new features!';
+    document.getElementById('fail-banner').classList.remove('show');
     var banner = document.getElementById('success-banner');
     banner.classList.add('show');
     banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Failure ────────────────────────────────────────────
+  function showFail(msg) {
+    document.getElementById('fail-msg').textContent = msg || 'Payment not completed.';
+    var banner = document.getElementById('fail-banner');
+    banner.classList.add('show');
+    banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function dismissFail() {
+    document.getElementById('fail-banner').classList.remove('show');
   }
 </script>
 </body>
