@@ -194,7 +194,8 @@
   // ── Provider detect ────────────────────────────────────
   function detectProvider() {
     try {
-      return Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Kolkata' ? 'razorpay' : 'paddle';
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      return (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') ? 'razorpay' : 'paddle';
     } catch(e) { return 'paddle'; }
   }
 
