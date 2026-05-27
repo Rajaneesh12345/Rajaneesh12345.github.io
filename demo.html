@@ -174,7 +174,7 @@
         settings: { displayMode: 'overlay' }
       });
     } else {
-      window.open(PAYMENT_LINKS.razorpay[planKey], '_blank');
+      window.open(PAYMENT_LINKS.razorpay[planKey] + '?prefill[email]=' + encodeURIComponent(DEMO_EMAIL), '_blank');
     }
 
     setTimeout(function() {

@@ -284,8 +284,11 @@
       return;
     }
 
-    // Razorpay: open payment link in new tab
-    window.open(PAYMENT_LINKS.razorpay[planKey], '_blank');
+    // Razorpay: open payment link with email pre-filled so webhook can identify the account
+    var rzpEmail = getEmail();
+    var rzpUrl = PAYMENT_LINKS.razorpay[planKey];
+    if (rzpEmail) rzpUrl += '?prefill[email]=' + encodeURIComponent(rzpEmail);
+    window.open(rzpUrl, '_blank');
     btn.disabled = false;
     btn.textContent = getBtnLabel(planKey);
     startPolling(planKey);
