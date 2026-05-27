@@ -5,9 +5,9 @@ var SUPABASE_ANON_KEY =
 
 var PAYMENT_LINKS = {
 	razorpay: {
-		pro: 'https://rzp.io/rzp/7Tu0thyg',
-		premium: 'https://rzp.io/rzp/0DuGMnn',
-		premium_yearly: 'https://rzp.io/rzp/elZECQ4',
+		pro: 'https://pages.razorpay.com/pl_SuR9cCkdLNoPP6/view',
+		premium: 'https://pages.razorpay.com/pl_SuRI6LVLwdxDN4/view',
+		premium_yearly: 'https://pages.razorpay.com/pl_SuRJXGXtHr3wLm/view',
 	},
 };
 
