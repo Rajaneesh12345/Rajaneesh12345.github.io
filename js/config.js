@@ -10,7 +10,7 @@ var PAYMENT_LINKS = {
   },
 };
 
-var PADDLE_CLIENT_TOKEN = 'live_42b07d511cbe9e5b33a08783c20';
+var PADDLE_CLIENT_TOKEN = 'live_f6642aa43c334d83d9f28dff476';
 
 var PADDLE_PRICE_IDS = {
   pro: 'pri_01ksckjz43htt6wyb4g1fwghve',
