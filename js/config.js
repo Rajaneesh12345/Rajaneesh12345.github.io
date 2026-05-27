@@ -6,7 +6,7 @@ var PAYMENT_LINKS = {
   razorpay: {
     pro: 'https://razorpay.com/payment-link/plink_SuPE84xECSuVtN',
     premium: 'https://razorpay.com/payment-link/plink_SuPEwaBnGJvmUA',
-    premium_yearly: 'https://razorpay.com/payment-link/plink_SuQ3bx12aIIIEP',
+    premium_yearly: 'https://razorpay.com/payment-link/plink_SuPFeIhHsdz4g2',
   },
 };
 
