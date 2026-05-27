@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Payment Successful — Explainly</title>
+  <link rel="stylesheet" href="/css/app.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1e1e2e" />
+  <style>
+    .success-page {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.25rem;
+    }
+    .success-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-size: 2rem;
+    }
+    .success-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: .5rem;
+    }
+    .success-sub {
+      font-size: .95rem;
+      color: #6b7280;
+      margin-bottom: 1.75rem;
+      max-width: 360px;
+    }
+    .poll-status {
+      font-size: .82rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .poll-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #5c6bc0;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    .tier-badge {
+      display: inline-block;
+      background: #5c6bc0;
+      color: #fff;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="app-nav">
+  <a href="/" class="nav-logo"><span>Explain</span>ly</a>
+  <span class="nav-title">Payment</span>
+</nav>
+
+<main class="app-main">
+  <div class="success-page">
+
+    <div class="success-icon">✓</div>
+
+    <h1 class="success-title" id="main-title">Payment Received!</h1>
+    <p class="success-sub" id="main-sub">
+      Your payment was successful. We're activating your plan now — this usually takes a few seconds.
+    </p>
+
+    <div class="poll-status" id="poll-status">
+      <div class="poll-dot"></div>
+      <span id="poll-text">Activating your plan…</span>
+    </div>
+
+    <div id="tier-badge-wrap" style="display:none;">
+      <span class="tier-badge" id="tier-badge"></span>
+    </div>
+
+    <a href="/app/account.html" class="btn btn-primary" id="account-btn" style="display:none; margin-top:.5rem;">
+      View Account
+    </a>
+
+    <a href="/app/upgrade.html" class="btn btn-outline" id="retry-btn" style="display:none; margin-top:.75rem; font-size:.85rem;">
+      Back to Plans
+    </a>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/api.js"></script>
+<script>
+  var MAX_POLLS  = 40;   // 40 × 3s = 2 min
+  var _pollCount = 0;
+  var _pollTimer = null;
+
+  // Read params Razorpay appends to the success URL
+  var params   = new URLSearchParams(window.location.search);
+  var status   = params.get('razorpay_payment_link_status');
+  var paymentId = params.get('razorpay_payment_id');
+
+  // If Razorpay says paid, start polling; otherwise show generic success
+  if (status === 'paid' || paymentId) {
+    startPolling();
+  } else {
+    // Direct navigation or non-Razorpay success — just show buttons
+    showDone(null);
+  }
+
+  function startPolling() {
+    if (!getToken()) {
+      // Not logged in — can't poll, show manual message
+      document.getElementById('poll-status').style.display = 'none';
+      document.getElementById('main-sub').textContent =
+        'Payment confirmed! Log in to see your updated plan.';
+      document.getElementById('account-btn').style.display = 'inline-flex';
+      return;
+    }
+
+    _pollTimer = setInterval(function() {
+      _pollCount++;
+      if (_pollCount > MAX_POLLS) {
+        clearInterval(_pollTimer);
+        document.getElementById('poll-text').textContent =
+          'Taking longer than expected — your plan may already be active.';
+        document.getElementById('account-btn').style.display = 'inline-flex';
+        document.getElementById('retry-btn').style.display = 'inline-flex';
+        return;
+      }
+
+      fetchUsage().then(function(data) {
+        var tier = (data.tier || 'free').toLowerCase();
+        if (tier !== 'free') {
+          clearInterval(_pollTimer);
+          showDone(tier);
+        }
+      }).catch(function() {});
+    }, 3000);
+  }
+
+  function showDone(tier) {
+    document.getElementById('poll-status').style.display = 'none';
+
+    if (tier) {
+      var label = tier.charAt(0).toUpperCase() + tier.slice(1);
+      document.getElementById('main-title').textContent = 'You\'re on ' + label + '!';
+      document.getElementById('main-sub').textContent =
+        'Your account has been upgraded. Enjoy your new features.';
+      var badge = document.getElementById('tier-badge');
+      badge.textContent = label + ' Active';
+      document.getElementById('tier-badge-wrap').style.display = 'block';
+    }
+
+    document.getElementById('account-btn').style.display = 'inline-flex';
+  }
+</script>
+</body>
+</html>
