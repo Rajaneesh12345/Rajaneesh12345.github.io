@@ -571,9 +571,9 @@ img { display: block; max-width: 100%; }
   transition: background .15s, color .15s, box-shadow .15s;
 }
 .provider-btn.active {
-  background: #fff;
-  color: #111827;
-  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  background: #5c6bc0;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(92,107,192,.35);
 }
 
 /* ── Loading skeletons ─────────────────────────────────── */
